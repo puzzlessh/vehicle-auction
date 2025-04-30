@@ -7,6 +7,7 @@ export enum OrderStatus {
   COMPLETED = 'COMPLETED',
 }
 
+@Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
