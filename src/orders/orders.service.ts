@@ -1,62 +1,52 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Order } from './entities/order.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
-  private orders: Order[] = [
-    {
-      id: 1,
-      creator: 'Иванов Иван',
-      customer: "ООО 'АвтоСервис'",
-      model: 'Toyota Camry 2022',
-      order: 'Ремонт после ДТП',
-      imageList: [
-        'https://example.com/photo1.jpg',
-        'https://example.com/photo2.jpg',
-      ],
-      vin: 'XTA210997654321',
-      odometer: 15000,
-      vehiclePassport: '45КН123456',
-      plateNumber: 'А123БВ777',
-      bodyColor: 'Чёрный',
-      description: 'Необходимо заменить переднее крыло и покрасить дверь.',
-      deadLine: new Date('2024-12-31'),
-      isEvacuationRequired: true,
-      isPrepaymentAllowed: false,
-      isAuctionStarted: false,
-      type: 'Ремонт',
-      status: 'В работе',
-      createAt: new Date('2024-05-15'),
-    },
-  ];
+  constructor(
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
+  ) {}
 
   findAll() {
-    return this.orders;
+    return this.orderRepository.find();
   }
 
-  findOne(id: string) {
-    const order = this.orders.find((item) => item.id === +id);
+  async findOne(id: string) {
+    const numericId = parseInt(id, 10);
+    const order = await this.orderRepository.findOneBy({ id: numericId });
     if (!order) {
-      throw new HttpException(`Order #${id} not found`, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(`Order #${id} not found`);
     }
     return order;
   }
 
-  create(createOrderDto: any) {
-    return this.orders.push(createOrderDto);
+  create(createOrderDto: CreateOrderDto) {
+    const order = this.orderRepository.create(createOrderDto);
+    return this.orderRepository.save(order);
   }
 
-  update(id: string, updateOrderDto: any) {
-    const existingOrder = this.findOne(id);
-    if (existingOrder) {
-      // existing entity
+  async update(id: string, updateOrderDto: UpdateOrderDto) {
+    const order = await this.orderRepository.preload({
+      id: +id,
+      ...updateOrderDto,
+    });
+    if (!order) {
+      throw new NotFoundException(`Order #${id} not found`);
     }
+    return this.orderRepository.save(order);
   }
 
-  remove(id: string) {
-    const orderIndex = this.orders.findIndex((item) => item.id === +id);
-    if (orderIndex >= 0) {
-      this.orders.splice(orderIndex, 1);
+  async remove(id: string) {
+    const numericId = parseInt(id, 10);
+    const order = await this.orderRepository.findOneBy({ id: numericId });
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
     }
+    return this.orderRepository.remove(order);
   }
 }

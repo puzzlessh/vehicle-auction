@@ -23,8 +23,8 @@ export class OrdersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(id);
+  findOne(@Param('id') id: number) {
+    return this.orderService.findOne('' + id);
   }
 
   @Post()
@@ -33,7 +33,7 @@ export class OrdersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, updateOrderDto: UpdateOrderDto) {
+  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.orderService.update(id, updateOrderDto);
   }
 

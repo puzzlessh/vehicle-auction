@@ -45,8 +45,8 @@ export class Order {
   @Column()
   description: string;
 
-  @Column()
-  deadLine: Date;
+  // @Column()
+  // deadLine: Date;
 
   @Column()
   isEvacuationRequired: boolean;

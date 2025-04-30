@@ -33,8 +33,8 @@ export class CreateOrderDto {
   @IsString()
   readonly description: string;
 
-  @IsDate()
-  readonly deadLine: Date;
+  //   @IsDate()
+  //   readonly deadLine: Date;
 
   @IsBoolean()
   readonly isEvacuationRequired: boolean;
@@ -50,7 +50,4 @@ export class CreateOrderDto {
 
   @IsString()
   readonly status: string;
-
-  @IsDate()
-  readonly createAt: Date;
 }
