@@ -1,21 +1,67 @@
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+export enum OrderStatus {
+  DRAFT = 'DRAFT',
+  MODERATION = 'MODERATION',
+  CANCELED = 'CANCELED',
+  PROCESS = 'PROCESS',
+  COMPLETED = 'COMPLETED',
+}
+
 export class Order {
+  @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
   creator: string;
+
+  @Column()
   customer: string;
+
+  @Column()
   model: string;
+
+  @Column()
   order: string;
+
+  @Column('text', { array: true })
   imageList: string[];
+
+  @Column()
   vin: string;
+
+  @Column()
   odometer: number;
+
+  @Column()
   vehiclePassport: string;
+
+  @Column()
   plateNumber: string;
+
+  @Column()
   bodyColor: string;
+
+  @Column()
   description: string;
+
+  @Column()
   deadLine: Date;
+
+  @Column()
   isEvacuationRequired: boolean;
+
+  @Column()
   isPrepaymentAllowed: boolean;
+
+  @Column()
   isAuctionStarted: boolean;
+
+  @Column()
   type: string;
+
+  @Column()
   status: string;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
 }
