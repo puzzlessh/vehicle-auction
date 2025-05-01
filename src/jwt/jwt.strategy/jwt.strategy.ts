@@ -27,6 +27,7 @@ export class JwtStrategy extends PassportStrategy(
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async validate(payload: JwtPayload): Promise<FullUserDto> {
     if (!payload.user) {
       throw new UnauthorizedException('Invalid token payload');
