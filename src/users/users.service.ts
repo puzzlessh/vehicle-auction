@@ -28,7 +28,6 @@ export class UsersService {
         status: userData.company.status,
       });
       await this.companyRepository.save(company);
-      console.log('Компания создана:', company);
     }
 
     let user = await this.userRepository.findOne({
@@ -54,6 +53,10 @@ export class UsersService {
           : null,
         company: company,
       });
+    } else {
+      if (!user.company || user.company.id !== company.id) {
+        user.company = company;
+      }
       await this.userRepository.save(user);
     }
 
