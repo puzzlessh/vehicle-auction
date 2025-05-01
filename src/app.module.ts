@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { OrdersModule } from './orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import * as Joi from '@hapi/joi';
+import { UsersModule } from './users/users.module';
+import configuration from 'src/config/configuration';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        PG_HOST: Joi.required(),
-        PG_PORT: Joi.number().default(5432),
-      }),
+      load: [configuration],
     }),
     OrdersModule,
     TypeOrmModule.forRoot({
@@ -25,8 +22,10 @@ import * as Joi from '@hapi/joi';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    UsersModule,
+    JwtModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

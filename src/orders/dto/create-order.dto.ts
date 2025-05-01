@@ -1,11 +1,13 @@
-import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsString,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
+import { OrderStatus } from '../entities/order.entity';
 export class CreateOrderDto {
-  @IsString()
-  readonly creator: string;
-
-  @IsString()
-  readonly customer: string;
-
   @IsString()
   readonly model: string;
 
@@ -19,7 +21,8 @@ export class CreateOrderDto {
   readonly vin: string;
 
   @IsNumber()
-  readonly odometer: number;
+  @IsOptional()
+  readonly odometer?: number;
 
   @IsString()
   readonly vehiclePassport: string;
@@ -33,8 +36,8 @@ export class CreateOrderDto {
   @IsString()
   readonly description: string;
 
-  //   @IsDate()
-  //   readonly deadLine: Date;
+  @IsDate()
+  readonly deadLine: Date;
 
   @IsBoolean()
   readonly isEvacuationRequired: boolean;
@@ -45,9 +48,7 @@ export class CreateOrderDto {
   @IsBoolean()
   readonly isAuctionStarted: boolean;
 
-  @IsString()
-  readonly type: string;
-
-  @IsString()
-  readonly status: string;
+  @IsEnum(OrderStatus)
+  @IsOptional()
+  status?: OrderStatus;
 }

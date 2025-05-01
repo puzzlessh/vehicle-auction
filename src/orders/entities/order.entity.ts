@@ -1,4 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Company } from 'src/users/entities/company.entity';
+
 export enum OrderStatus {
   DRAFT = 'DRAFT',
   MODERATION = 'MODERATION',
@@ -12,11 +15,11 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  creator: string;
+  @ManyToOne(() => User, (user) => user.orders)
+  user: User;
 
-  @Column()
-  customer: string;
+  @ManyToOne(() => Company, (company) => company.orders)
+  company: Company;
 
   @Column()
   model: string;
@@ -45,8 +48,8 @@ export class Order {
   @Column()
   description: string;
 
-  // @Column()
-  // deadLine: Date;
+  @Column()
+  deadLine: Date;
 
   @Column()
   isEvacuationRequired: boolean;
@@ -60,9 +63,13 @@ export class Order {
   @Column()
   type: string;
 
-  @Column()
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.DRAFT,
+  })
+  status: OrderStatus;
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
-  createAt: Date;
+  createdAt: Date;
 }
