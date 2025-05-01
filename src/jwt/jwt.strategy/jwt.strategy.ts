@@ -16,10 +16,14 @@ export class JwtStrategy extends PassportStrategy(
   'access-jwt-strategy',
 ) {
   constructor(private readonly configService: ConfigService) {
+    const accessSecret = configService.get<string>('accessSecret');
+    if (!accessSecret) {
+      throw new Error('ACCESS_SECRET is not defined');
+    }
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'secret',
+      secretOrKey: accessSecret,
     });
   }
 
