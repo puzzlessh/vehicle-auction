@@ -6,6 +6,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { UsersService } from 'src/users/users.service';
+import { FullUserDto } from 'src/users/dto/full-user.dto';
 
 @Injectable()
 export class OrdersService {
@@ -32,8 +33,16 @@ export class OrdersService {
     return order;
   }
 
-  create(createOrderDto: CreateOrderDto) {
-    const order = this.orderRepository.create(createOrderDto);
+  async create(
+    createOrderDto: CreateOrderDto,
+    userData: FullUserDto,
+  ): Promise<Order> {
+    const user = await this.userService.findOrCreateUserWithCompany(userData);
+    const order = this.orderRepository.create({
+      ...createOrderDto,
+      user: user,
+      company: user.company,
+    });
     return this.orderRepository.save(order);
   }
 

@@ -12,6 +12,9 @@ export class CreateOrderDto {
   readonly model: string;
 
   @IsString()
+  readonly type: string;
+
+  @IsString()
   readonly order: string;
 
   @IsString({ each: true })

@@ -11,6 +11,7 @@ import { JwtModule } from './jwt/jwt.module';
     ConfigModule.forRoot({
       load: [configuration],
     }),
+    JwtModule,
     OrdersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -22,8 +23,7 @@ import { JwtModule } from './jwt/jwt.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    UsersModule,
-    JwtModule,
+    // UsersModule,
   ],
   controllers: [],
   providers: [],
