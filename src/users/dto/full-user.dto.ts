@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEmail,
@@ -8,7 +7,6 @@ import {
   IsObject,
 } from 'class-validator';
 import { CompanyDto } from './company.dto';
-// import { RoleDto } from './role.dto';
 
 export class FullUserDto {
   @IsEmail()

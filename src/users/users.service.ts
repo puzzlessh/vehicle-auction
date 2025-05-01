@@ -33,6 +33,7 @@ export class UsersService {
 
     let user = await this.userRepository.findOne({
       where: { id: userData.id },
+      relations: ['company'],
     });
 
     if (!user) {

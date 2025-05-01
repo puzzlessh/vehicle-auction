@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { OrdersModule } from './orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
 import configuration from 'src/config/configuration';
 import { JwtModule } from './jwt/jwt.module';
 
@@ -23,7 +22,6 @@ import { JwtModule } from './jwt/jwt.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    // UsersModule,
   ],
   controllers: [],
   providers: [],
