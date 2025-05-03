@@ -10,6 +10,7 @@ import { DatabaseModule } from './database/database.module';
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
+      isGlobal: true,
     }),
     JwtModule,
     OrdersModule,
