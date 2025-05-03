@@ -16,12 +16,25 @@ export class OrdersService {
     private readonly userService: UsersService,
   ) {}
 
-  findAll(paginationQueryDto: PaginationQueryDto) {
+  findAll(
+    paginationQueryDto: PaginationQueryDto,
+    userPermissions: string[],
+    userId: number,
+  ) {
     const { limit, offset } = paginationQueryDto;
-    return this.orderRepository.find({
-      skip: offset,
-      take: limit,
-    });
+
+    if (userPermissions.includes('ADMIN-SERVICE')) {
+      return this.orderRepository.find({
+        skip: offset,
+        take: limit,
+      });
+    } else {
+      return this.orderRepository.find({
+        where: { user: { id: userId } },
+        skip: offset,
+        take: limit,
+      });
+    }
   }
 
   async findOne(id: string) {

@@ -25,8 +25,14 @@ export class OrdersController {
   constructor(private readonly orderService: OrdersService) {}
 
   @Get()
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
-    return this.orderService.findAll(paginationQuery);
+  @UseGuards(JwtAccessGuard)
+  async findAll(
+    @Request() req: RequestWhithUser,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    const userPermissions = req.user.role.permissions;
+    const userId = req.user.id;
+    return this.orderService.findAll(paginationQuery, userPermissions, userId);
   }
 
   @Get(':id')
