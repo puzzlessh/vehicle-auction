@@ -27,9 +27,11 @@ export class OrdersService {
   async findOne(id: string) {
     const numericId = parseInt(id, 10);
     const order = await this.orderRepository.findOneBy({ id: numericId });
+
     if (!order) {
       throw new NotFoundException(`Order #${id} not found`);
     }
+
     return order;
   }
 
@@ -52,9 +54,11 @@ export class OrdersService {
       id: +id,
       ...updateOrderDto,
     });
+
     if (!order) {
       throw new NotFoundException(`Order #${id} not found`);
     }
+
     return this.orderRepository.save(order);
   }
 }
