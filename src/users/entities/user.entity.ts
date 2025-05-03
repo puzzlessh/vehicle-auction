@@ -25,9 +25,6 @@ export class User {
   @Column()
   description: string;
 
-  // @Column('text', { array: true })
-  // role: string[];
-
   @Column({
     type: 'jsonb',
     nullable: true,
@@ -38,7 +35,6 @@ export class User {
     permissions: string[];
   } | null;
 
-  //
   @ManyToOne(() => Company, (company) => company.users)
   company: Company;
 

@@ -53,6 +53,7 @@ export class UsersService {
           : null,
         company: company,
       });
+      await this.userRepository.save(user);
     } else {
       if (!user.company || user.company.id !== company.id) {
         user.company = company;
