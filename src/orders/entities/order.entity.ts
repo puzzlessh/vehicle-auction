@@ -70,6 +70,9 @@ export class Order {
   })
   status: OrderStatus;
 
+  @Column()
+  createdById: number;
+
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

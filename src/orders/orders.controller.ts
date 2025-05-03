@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  // Delete,
   Get,
   Param,
   Patch,
@@ -27,7 +26,6 @@ export class OrdersController {
 
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
-    // const { limit, offset } = paginationQuery;
     return this.orderService.findAll(paginationQuery);
   }
 
@@ -50,9 +48,4 @@ export class OrdersController {
   update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
     return this.orderService.update(id, updateOrderDto);
   }
-
-  //   @Delete(':id')
-  //   remove(@Param('id') id: string) {
-  //     return this.orderService.remove(id);
-  //   }
 }

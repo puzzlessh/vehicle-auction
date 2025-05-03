@@ -42,6 +42,7 @@ export class OrdersService {
       ...createOrderDto,
       user: user,
       company: user.company,
+      createdById: user.id,
     });
     return this.orderRepository.save(order);
   }
@@ -56,13 +57,4 @@ export class OrdersService {
     }
     return this.orderRepository.save(order);
   }
-
-  // async remove(id: string) {
-  //   const numericId = parseInt(id, 10);
-  //   const order = await this.orderRepository.findOneBy({ id: numericId });
-  //   if (!order) {
-  //     throw new NotFoundException(`Order with ID ${id} not found`);
-  //   }
-  //   return this.orderRepository.remove(order);
-  // }
 }
