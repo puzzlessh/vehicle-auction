@@ -11,7 +11,7 @@ import { AuctionType } from '../entities/auction.entity';
 export class UpdateAuctionDto {
   @IsNumber()
   @IsPositive()
-  orderId: number;
+  orderId?: number;
 
   @IsOptional()
   type?: AuctionType;

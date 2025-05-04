@@ -10,7 +10,7 @@ import {
 export class CreateAuctionDto {
   @IsNumber()
   @IsPositive()
-  readonly orderId: number;
+  orderId: number;
 
   @IsDate()
   startTime: Date;
@@ -30,5 +30,5 @@ export class CreateAuctionDto {
   @IsArray()
   @IsNumber({}, { each: true })
   @IsPositive({ each: true })
-  readonly allowedCompanyIds: number[];
+  allowedCompanyIds: number[];
 }

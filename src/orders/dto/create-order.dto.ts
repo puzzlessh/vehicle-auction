@@ -9,44 +9,44 @@ import {
 import { OrderStatus } from '../entities/order.entity';
 export class CreateOrderDto {
   @IsString()
-  readonly model: string;
+  model: string;
 
   @IsString()
-  readonly type: string;
+  type: string;
 
   @IsString({ each: true })
-  readonly imageList: string[];
+  imageList: string[];
 
   @IsString()
-  readonly vin: string;
+  vin: string;
 
   @IsNumber()
   @IsOptional()
-  readonly odometer?: number;
+  odometer?: number;
 
   @IsString()
-  readonly vehiclePassport: string;
+  vehiclePassport: string;
 
   @IsString()
-  readonly plateNumber: string;
+  plateNumber: string;
 
   @IsString()
-  readonly bodyColor: string;
+  bodyColor: string;
 
   @IsString()
-  readonly description: string;
+  description: string;
 
   @IsDate()
-  readonly deadLine: Date;
+  deadLine: Date;
 
   @IsBoolean()
-  readonly isEvacuationRequired: boolean;
+  isEvacuationRequired: boolean;
 
   @IsBoolean()
-  readonly isPrepaymentAllowed: boolean;
+  isPrepaymentAllowed: boolean;
 
   @IsBoolean()
-  readonly isAuctionStarted: boolean;
+  isAuctionStarted: boolean;
 
   @IsEnum(OrderStatus)
   @IsOptional()
