@@ -1,6 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Company } from 'src/users/entities/company.entity';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum OrderStatus {
   DRAFT = 'DRAFT',
@@ -15,17 +13,11 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.orders)
-  user: User;
-
-  @ManyToOne(() => Company, (company) => company.orders)
-  company: Company;
+  @Column()
+  companyId: number;
 
   @Column()
   model: string;
-
-  @Column()
-  order: string;
 
   @Column('text', { array: true })
   imageList: string[];

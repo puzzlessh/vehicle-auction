@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
-import { Company } from '../users/entities/company.entity';
 import { Order } from '../orders/entities/order.entity';
 
 @Module({
@@ -18,7 +16,7 @@ import { Order } from '../orders/entities/order.entity';
           username: configService.get<string>('postgres.username'),
           password: configService.get<string>('postgres.password'),
           database: configService.get<string>('postgres.database'),
-          entities: [User, Company, Order],
+          entities: [Order],
           synchronize: process.env.NODE_ENV !== 'production',
           logging: process.env.NODE_ENV === 'development',
         };

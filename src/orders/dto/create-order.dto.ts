@@ -14,9 +14,6 @@ export class CreateOrderDto {
   @IsString()
   readonly type: string;
 
-  @IsString()
-  readonly order: string;
-
   @IsString({ each: true })
   readonly imageList: string[];
 
