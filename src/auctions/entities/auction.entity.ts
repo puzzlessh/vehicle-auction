@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Entity,
   Column,
@@ -17,9 +18,15 @@ export enum AuctionType {
 
 @Entity()
 export class Auction {
+  @ApiProperty({ description: 'ID аукциона' })
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty({
+    description: 'Статус аукциона',
+    enum: AuctionType,
+    example: AuctionType.NOT_ACTIVE,
+  })
   @Column({
     type: 'enum',
     enum: AuctionType,

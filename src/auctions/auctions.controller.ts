@@ -10,6 +10,13 @@ import {
   UseGuards,
   NotFoundException,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from '@nestjs/swagger';
 import { AuctionsService } from './auctions.service';
 import { CreateAuctionDto } from './dto/create-auction.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
@@ -21,12 +28,21 @@ interface RequestWithUser extends Request {
   user: FullUserDto;
 }
 
+@ApiTags('auctions')
+@ApiBearerAuth('access-token')
 @Controller('auctions')
 export class AuctionsController {
   constructor(private readonly auctionsService: AuctionsService) {}
 
   @Post()
   @UseGuards(JwtAccessGuard)
+  @ApiOperation({ summary: 'Создать новый аукцион' })
+  @ApiResponse({
+    status: 201,
+    description: 'Аукцион успешно создан',
+    type: Auction,
+  })
+  @ApiResponse({ status: 403, description: 'Нет прав для создания аукциона' })
   async create(
     @Body() createAuctionDto: CreateAuctionDto,
     @Request() req: RequestWithUser,
@@ -50,6 +66,17 @@ export class AuctionsController {
 
   @Patch(':id')
   @UseGuards(JwtAccessGuard)
+  @ApiOperation({ summary: 'Обновить аукцион' })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'ID аукциона',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Аукцион успешно обновлен',
+    type: Auction,
+  })
   async update(
     @Param('id') id: string,
     @Body() updateAuctionDto: UpdateAuctionDto,
