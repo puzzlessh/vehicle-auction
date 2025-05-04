@@ -6,6 +6,7 @@ import { JwtModule } from './jwt/jwt.module';
 import { DatabaseModule } from './database/database.module';
 import { AuctionsModule } from './auctions/auctions.module';
 import { OffersModule } from './offers/offers.module';
+import { AuctionSchedulerModule } from './auction-scheduler/auction-scheduler.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { OffersModule } from './offers/offers.module';
     DatabaseModule,
     AuctionsModule,
     OffersModule,
+    AuctionSchedulerModule,
   ],
   controllers: [],
   providers: [],

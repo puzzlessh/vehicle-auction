@@ -36,14 +36,16 @@ export class AuctionsController {
 
   @Get()
   @UseGuards(JwtAccessGuard)
-  async getAvailableCompanies(
+  async getAvailableAuctions(
     @Query('company_id') companyId: number,
     @Request() req: RequestWithUser,
-  ): Promise<{ auction_id: number; company_id: number }[]> {
-    return await this.auctionsService.getAvailableCompanies(
-      companyId,
-      req.user,
-    );
+  ): Promise<
+    { auction_id: number; company_id: number | null; isVisible: boolean }[]
+  > {
+    if (companyId === undefined || isNaN(companyId)) {
+      throw new NotFoundException('Некорректный идентификатор компании');
+    }
+    return await this.auctionsService.getAvailableAuctions(companyId, req.user);
   }
 
   @Patch(':id')

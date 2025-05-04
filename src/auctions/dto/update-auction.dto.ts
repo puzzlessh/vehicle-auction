@@ -29,10 +29,6 @@ export class UpdateAuctionDto {
   public?: boolean;
 
   @IsOptional()
-  @IsBoolean()
-  isVisible?: boolean;
-
-  @IsOptional()
   @IsNumber()
   @IsPositive()
   startCost?: number;

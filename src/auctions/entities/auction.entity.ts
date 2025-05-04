@@ -38,10 +38,10 @@ export class Auction {
   offers: Offer[];
 
   @Column({ type: 'timestamp', nullable: true })
-  startTime?: Date;
+  startTime: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  endTime?: Date;
+  endTime: Date;
 
   @Column({ default: false })
   public: boolean;

@@ -12,7 +12,7 @@ import { Repository, EntityManager } from 'typeorm';
 import { Auction, AuctionType } from './entities/auction.entity';
 import { CompanyAuction } from './entities/company-auction.entity';
 import { Order, OrderStatus } from '../orders/entities/order.entity';
-import { FullUserDto } from '../users/dto/full-user.dto';
+import { FullUserDto } from '..//users/dto/full-user.dto';
 import { CreateAuctionDto } from './dto/create-auction.dto';
 import { UpdateAuctionDto } from './dto/update-auction.dto';
 
@@ -53,9 +53,13 @@ export class AuctionsService {
             );
           }
 
-          const existingAuction = await manager.findOne(Auction, {
-            where: { orderId: createAuctionDto.orderId },
-          });
+          const existingAuction = await manager.findOne(
+            Auction,
+
+            {
+              where: { orderId: createAuctionDto.orderId },
+            },
+          );
           if (existingAuction) {
             throw new ConflictException(
               `Аукцион для заявки с id ${createAuctionDto.orderId} уже существует`,
@@ -66,11 +70,15 @@ export class AuctionsService {
           order.isAuctionStarted = true;
           await manager.save(Order, order);
 
+          const isVisible = createAuctionDto.allowedCompanyIds.length === 0;
           const auction = manager.create(Auction, {
             orderId: createAuctionDto.orderId,
             type: AuctionType.NOT_ACTIVE,
-            public: false,
-            isVisible: true,
+            public: createAuctionDto.public,
+            isVisible,
+            startTime: createAuctionDto.startTime,
+            endTime: createAuctionDto.endTime,
+            startCost: createAuctionDto.startCost,
           });
           const savedAuction = await manager.save(Auction, auction);
 
@@ -104,10 +112,12 @@ export class AuctionsService {
     );
   }
 
-  async getAvailableCompanies(
+  async getAvailableAuctions(
     companyId: number,
     user: FullUserDto,
-  ): Promise<{ auction_id: number; company_id: number }[]> {
+  ): Promise<
+    { auction_id: number; company_id: number | null; isVisible: boolean }[]
+  > {
     try {
       if (!user.role.permissions.includes('VIEW-AUCTION-COMPANIES')) {
         throw new ForbiddenException(
@@ -115,26 +125,45 @@ export class AuctionsService {
         );
       }
 
-      const companyAuctions = await this.companyAuctionRepository
+      const companySpecificAuctions = await this.companyAuctionRepository
         .createQueryBuilder('ca')
         .leftJoinAndSelect('ca.auction', 'auction')
         .where('ca.companyId = :companyId', { companyId })
         .getMany();
 
-      return companyAuctions.map((ca) => ({
-        auction_id: ca.auction.id,
-        company_id: ca.companyId,
-      }));
+      const publicAuctions = await this.auctionRepository
+        .createQueryBuilder('auction')
+        .where('auction.isVisible = :isVisible', { isVisible: true })
+        .getMany();
+
+      const allAuctions = [
+        ...companySpecificAuctions.map((ca) => ({
+          auction_id: ca.auction.id,
+          company_id: ca.companyId,
+          isVisible: ca.auction.isVisible,
+        })),
+        ...publicAuctions.map((auction) => ({
+          auction_id: auction.id,
+          company_id: null,
+          isVisible: auction.isVisible,
+        })),
+      ];
+
+      const uniqueAuctions = Array.from(
+        new Map(allAuctions.map((item) => [item.auction_id, item])).values(),
+      );
+
+      return uniqueAuctions;
     } catch (error: unknown) {
       this.logger.error(
-        `Ошибка при получении доступных компаний для companyId ${companyId}`,
+        `Ошибка при получении доступных аукционов для companyId ${companyId}`,
         error instanceof Error ? error.stack : undefined,
       );
       if (error instanceof ForbiddenException) {
         throw error;
       }
       throw new InternalServerErrorException(
-        'Не удалось получить список компаний',
+        'Не удалось получить список аукционов',
       );
     }
   }
@@ -176,9 +205,13 @@ export class AuctionsService {
             );
           }
 
+          const isVisible =
+            !updateAuctionDto.allowedCompanyIds ||
+            updateAuctionDto.allowedCompanyIds.length === 0;
           const updatedAuction = manager.create(Auction, {
             ...auction,
             ...updateAuctionDto,
+            isVisible,
           });
           const savedAuction = await manager.save(Auction, updatedAuction);
 

@@ -2,9 +2,9 @@ import {
   IsNumber,
   IsPositive,
   IsArray,
-  IsDateString,
   IsBoolean,
   IsOptional,
+  IsDate,
 } from 'class-validator';
 
 export class CreateAuctionDto {
@@ -12,12 +12,13 @@ export class CreateAuctionDto {
   @IsPositive()
   readonly orderId: number;
 
-  @IsDateString()
+  @IsDate()
   startTime: Date;
 
-  @IsDateString()
+  @IsDate()
   endTime: Date;
 
+  @IsOptional()
   @IsBoolean()
   public?: boolean;
 
