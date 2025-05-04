@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
 import { JwtModule } from './jwt/jwt.module';
 import { DatabaseModule } from './database/database.module';
+import { AuctionsModule } from './auctions/auctions.module';
+import { OffersModule } from './offers/offers.module';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { DatabaseModule } from './database/database.module';
     JwtModule,
     OrdersModule,
     DatabaseModule,
+    AuctionsModule,
+    OffersModule,
   ],
   controllers: [],
   providers: [],

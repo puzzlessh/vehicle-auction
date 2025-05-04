@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Auction } from 'src/auctions/entities/auction.entity';
 
 export enum OrderStatus {
   DRAFT = 'DRAFT',
@@ -67,4 +68,7 @@ export class Order {
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @OneToMany(() => Auction, (auction) => auction.order, { cascade: true })
+  auctions: Auction[];
 }
