@@ -3,7 +3,7 @@ import {
   IsNumber,
   IsPositive,
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsArray,
 } from 'class-validator';
 import { AuctionType } from '../entities/auction.entity';
@@ -17,11 +17,11 @@ export class UpdateAuctionDto {
   type?: AuctionType;
 
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   startTime?: Date;
 
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   endTime?: Date;
 
   @IsOptional()
